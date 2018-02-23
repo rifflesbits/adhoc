@@ -15,6 +15,15 @@
   </properties>
 
   <dependencies>
+  
+  	<!-- For reading/writing csv -->
+	<dependency>
+	    <groupId>org.beanio</groupId>
+	    <artifactId>beanio</artifactId>
+	    <version>2.1.0</version>
+	</dependency>
+  
+  
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
