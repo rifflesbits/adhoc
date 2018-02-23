@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.adhoc.homework</groupId>
-  <artifactId>slcp</artifactId>
+  <artifactId>slcsp</artifactId>
   <version>1.0.0</version>
   <packaging>jar</packaging>
 
-  <name>slcp</name>
+  <name>slcsp</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -22,4 +22,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  
 </project>
