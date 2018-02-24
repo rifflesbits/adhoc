@@ -11,6 +11,7 @@ import org.beanio.StreamFactory;
 import org.beanio.builder.CsvParserBuilder;
 import org.beanio.builder.StreamBuilder;
 
+import com.adhoc.homework.slcsp.model.PlansHeaderRecord;
 import com.adhoc.homework.slcsp.model.PlansRecord;
 import com.adhoc.homework.slcsp.model.ZipsHeaderRecord;
 import com.adhoc.homework.slcsp.model.ZipsRecord;
@@ -57,6 +58,34 @@ public class InputFileReader {
 	public List<PlansRecord> readPlansFile(){
 		
 		List<PlansRecord> rPlansRecList = new ArrayList<PlansRecord>();
+		
+		InputStream plansFileInStream = getClass().getResourceAsStream("/plans.csv");
+		
+		Reader csvReader = new InputStreamReader(plansFileInStream);		
+		
+		StreamFactory streamFactory = StreamFactory.newInstance();
+		
+		StreamBuilder streamBuilder = new StreamBuilder("plansFile")
+				.format("csv")
+				.parser(new CsvParserBuilder())
+				.addRecord(PlansHeaderRecord.class).maxOccurs(1)
+				.addRecord(PlansRecord.class);
+		
+		streamFactory.define(streamBuilder);
+		
+		BeanReader beanReader = streamFactory.createReader("plansFile", csvReader);
+		
+		Object oRecord = null;
+		
+		while( (oRecord = beanReader.read()) != null){
+			
+			if(oRecord instanceof PlansRecord){
+
+				PlansRecord iPlansRecord = (PlansRecord)oRecord;
+				
+				rPlansRecList.add(iPlansRecord);				
+			}
+		}
 		
 		return rPlansRecList;
 	}

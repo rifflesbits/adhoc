@@ -3,6 +3,7 @@ package com.adhoc.homework.slcsp;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.adhoc.homework.slcsp.model.PlansRecord;
 import com.adhoc.homework.slcsp.model.ZipsRecord;
 
 public class SlcspLauncher {
@@ -19,6 +20,8 @@ public class SlcspLauncher {
 	public void processReport(){
 		
 		List<ZipsRecord> zipsRecList = slcspProcessor.getZipsRecList();
+		
+		List<PlansRecord> plansRecList = slcspProcessor.getPlansRecList();
 	}
 	
 	public static void main(String[] args) {

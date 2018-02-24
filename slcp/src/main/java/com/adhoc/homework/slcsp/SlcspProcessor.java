@@ -3,6 +3,7 @@ package com.adhoc.homework.slcsp;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.adhoc.homework.slcsp.model.PlansRecord;
 import com.adhoc.homework.slcsp.model.ZipsRecord;
 
 public class SlcspProcessor {
@@ -20,8 +21,17 @@ public class SlcspProcessor {
 			
 		List<ZipsRecord> zipsRecList = inputFileReader.readZipsFile();
 	
-		logger.info("zipsRecList sizes: " + (zipsRecList == null ? 0 : zipsRecList.size()));
+		logger.info("zipsRecList size: " + (zipsRecList == null ? 0 : zipsRecList.size()));
 		
 		return zipsRecList;
+	}
+	
+	public List<PlansRecord> getPlansRecList(){
+		
+		List<PlansRecord> plansRecList = inputFileReader.readPlansFile();
+		
+		logger.info("plansRecList size: " + (plansRecList == null ? 0 : plansRecList.size()));
+		
+		return plansRecList;
 	}
 }
