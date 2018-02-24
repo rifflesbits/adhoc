@@ -4,7 +4,7 @@ import org.beanio.annotation.Field;
 import org.beanio.annotation.Fields;
 import org.beanio.annotation.Record;
 
-@Record
+@Record(maxOccurs=1)
 @Fields({
 	@Field(name="zipCode", literal="zipcode", ordinal=1),
 	@Field(name="rate", literal="rate", ordinal=2),
