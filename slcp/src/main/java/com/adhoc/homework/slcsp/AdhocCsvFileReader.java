@@ -56,7 +56,12 @@ public class AdhocCsvFileReader {
 	}
 	
 	
-	public List<ZipsRecord> readZipsFile() {
+	public List<ZipsRecord> readZipsFile(List<String> pZipCodesToReadList) {
+		
+		if(pZipCodesToReadList == null || pZipCodesToReadList.isEmpty()){
+		
+			return null;
+		}
 		
 		List<ZipsRecord> rZipsRecList = new ArrayList<ZipsRecord>();
 
@@ -84,7 +89,12 @@ public class AdhocCsvFileReader {
 
 				ZipsRecord iZipsRecord = (ZipsRecord)oRecord;
 				
-				rZipsRecList.add(iZipsRecord);				
+				String zipCode = iZipsRecord.getZipCode();
+				
+				if(pZipCodesToReadList.contains(zipCode)){
+				
+					rZipsRecList.add(iZipsRecord);	
+				}			
 			}
 		}
 		

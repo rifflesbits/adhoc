@@ -1,10 +1,11 @@
 package com.adhoc.homework.slcsp;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
-import com.adhoc.homework.slcsp.model.PlansRecord;
-import com.adhoc.homework.slcsp.model.SlcspRecord;
+import com.adhoc.homework.slcsp.model.StateRateArea;
 import com.adhoc.homework.slcsp.model.ZipsRecord;
 
 public class SlcspLauncher {
@@ -19,12 +20,18 @@ public class SlcspLauncher {
 	}
 	
 	public void processReport(){
-		
-		List<ZipsRecord> zipsRecList = slcspProcessor.getZipsRecList();
-		
-		List<PlansRecord> plansRecList = slcspProcessor.getPlansRecList();
-		
-		List<SlcspRecord> slcspRecList = slcspProcessor.getSlcspRecList();
+						
+						
+		Map<String, List<ZipsRecord>> requestedZipCodeMapToZipRecList = slcspProcessor.getZipCodeMapToZipsRecList();
+				
+		for(String iZipCode : requestedZipCodeMapToZipRecList.keySet()){
+												
+			Set<StateRateArea> stateRateAreaSet = slcspProcessor.getStateRateAreaSetForZipCode(iZipCode,
+					requestedZipCodeMapToZipRecList);
+			
+			System.out.println("zip code: " + iZipCode + ", stateRateAreaSet: " + stateRateAreaSet);
+			
+		}
 	}
 	
 	public static void main(String[] args) {
