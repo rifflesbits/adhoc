@@ -1,9 +1,11 @@
 package com.adhoc.homework.slcsp;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.logging.Logger;
 
 import com.adhoc.homework.slcsp.model.StateRateArea;
@@ -27,7 +29,7 @@ public class SlcspLauncher {
 		Map<String, Set<StateRateArea>> zipMapToStateRateAreaSet = slcspProcessor
 				.getZipMapToStateRateAreaSet(zipMapToZipRecList);
 
-		Map<StateRateArea, Set<BigDecimal>> rateAreaMapToSilverPlanRateSet = slcspProcessor
+		Map<StateRateArea, SortedSet<BigDecimal>> rateAreaMapToSilverPlanRateSet = slcspProcessor
 				.getRateAreaMapToSilverPlanRateSet();
 
 		for (String iZipCode : zipMapToZipRecList.keySet()) {
@@ -38,9 +40,18 @@ public class SlcspLauncher {
 
 				StateRateArea stateRateArea = stateRateAreaSet.iterator().next();
 
-				Set<BigDecimal> rateSet = rateAreaMapToSilverPlanRateSet.get(stateRateArea);
+				SortedSet<BigDecimal> sortedRateSet = rateAreaMapToSilverPlanRateSet.get(stateRateArea);
 
-				System.out.println("zip code: " + iZipCode + ", stateRateArea: " + stateRateArea + ", rateSet: " + rateSet);
+				BigDecimal slcspRate = null;
+				
+				if(sortedRateSet != null && sortedRateSet.size() >= 2){
+					
+					List<BigDecimal> sortedRateList = new ArrayList<BigDecimal>(sortedRateSet);
+					
+					slcspRate = sortedRateList.get(1);
+				}
+				
+				System.out.println("zip code: " + iZipCode + ", slcspRate: " + slcspRate + ", stateRateArea: " + stateRateArea + ", rateSet: " + sortedRateSet);
 
 			} else {
 

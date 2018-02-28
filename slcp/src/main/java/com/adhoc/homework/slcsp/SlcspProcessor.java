@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import com.adhoc.homework.slcsp.model.PlansRecord;
@@ -102,9 +104,9 @@ public class SlcspProcessor {
 	
 	
 	
-	public Map<StateRateArea, Set<BigDecimal>> getRateAreaMapToSilverPlanRateSet() {
+	public Map<StateRateArea, SortedSet<BigDecimal>> getRateAreaMapToSilverPlanRateSet() {
 
-		Map<StateRateArea, Set<BigDecimal>> rateAreaMapToSilverPlanRateSet = new HashMap<StateRateArea, Set<BigDecimal>>();
+		Map<StateRateArea, SortedSet<BigDecimal>> rateAreaMapToSilverPlanRateSet = new HashMap<StateRateArea, SortedSet<BigDecimal>>();
 		
 		List<PlansRecord> silverPlanRecList = adhocCsvFileReader.readSilverPlansFromFile();
 		
@@ -114,13 +116,13 @@ public class SlcspProcessor {
 			
 			// will be non-null if having already processed this stateRateArea
 			// at least once
-			Set<BigDecimal> rateSet = rateAreaMapToSilverPlanRateSet.get(stateRateArea);
+			SortedSet<BigDecimal> rateSet = rateAreaMapToSilverPlanRateSet.get(stateRateArea);
 			
 			if(rateSet == null){
 				
 				// the first time we're encountering this stateRateArea, so 
 				// create a new set and add it to the map
-				rateSet = new HashSet<BigDecimal>();
+				rateSet = new TreeSet<BigDecimal>();
 				
 				rateAreaMapToSilverPlanRateSet.put(stateRateArea, rateSet);
 			}
