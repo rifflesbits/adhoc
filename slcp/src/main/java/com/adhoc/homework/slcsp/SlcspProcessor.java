@@ -16,6 +16,9 @@ import com.adhoc.homework.slcsp.model.SlcspRecord;
 import com.adhoc.homework.slcsp.model.StateRateArea;
 import com.adhoc.homework.slcsp.model.ZipsRecord;
 
+/**
+ * Contains utility methods for processing the data
+ */
 public class SlcspProcessor {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
@@ -29,6 +32,15 @@ public class SlcspProcessor {
 	}
 	
 	
+	/**
+	 * Gets a map of zip codes associated with Sets of {@link StateRateArea}
+	 * 
+	 * @param pZipCodeMapToZipRecList
+	 * 		The map of zipcodes and their zip file rec list
+	 * 
+	 * @return
+	 * 		a map of zip codes associated with Sets of {@link StateRateArea}
+	 */
 	Map<String, Set<StateRateArea>> getZipMapToStateRateAreaSet(
 			Map<String, List<ZipsRecord>> pZipCodeMapToZipRecList) {
 					
@@ -58,7 +70,13 @@ public class SlcspProcessor {
 	
 	
 	
-	
+	/**
+	 * Gets a Map of zip codes pointing to their {@link ZipsRecord} 
+	 * objects red in from the input file
+	 *  
+	 * @return
+	 * 		A Map of zip codes and their associated ZipsRecord's
+	 */
 	Map<String, List<ZipsRecord>> getZipMapToZipsRecList(){
 		
 		List<String> zipCodeListFromSlcpRecList = getRequestedZipCodeList();
@@ -87,6 +105,15 @@ public class SlcspProcessor {
 	}
 	
 	
+	/**
+	 * Gets a list of zip codes from the slcsp input file
+	 * 
+	 * These are the requested zip codes for which we must specify 
+	 * the rate
+	 * 
+	 * @return
+	 * 		The list of zip codes from the input request file
+	 */
 	public List<String> getRequestedZipCodeList(){
 		
 		List<SlcspRecord> slcpRecList = adhocCsvFileReader.readSlcspFile();
@@ -103,7 +130,13 @@ public class SlcspProcessor {
 	}
 	
 	
-	
+	/**
+	 * Gets a Map of {@link StateRateArea} keys pointing to their associated 
+	 * sorted set of rates
+	 * 
+	 * @return
+	 * 		A Map of {@link StateRateArea} keys and their Sorted set of rates
+	 */
 	public Map<StateRateArea, SortedSet<BigDecimal>> getRateAreaMapToSilverPlanRateSet() {
 
 		Map<StateRateArea, SortedSet<BigDecimal>> rateAreaMapToSilverPlanRateSet = new HashMap<StateRateArea, SortedSet<BigDecimal>>();

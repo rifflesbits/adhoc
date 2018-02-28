@@ -25,6 +25,10 @@ public class SlcspLauncher {
 		slcspProcessor = new SlcspProcessor();
 	}
 
+	/**
+	 * Processes the input files, creates the needed data structures
+	 * and writes the output file
+	 */
 	public void processReport() {
 
 		Map<String, List<ZipsRecord>> zipMapToZipRecList = slcspProcessor.getZipMapToZipsRecList();
@@ -64,6 +68,12 @@ public class SlcspLauncher {
 
 	}
 
+	/**
+	 * Main entry point method
+	 * 
+	 * @param args
+	 * 		Not used
+	 */
 	public static void main(String[] args) {
 
 		SlcspLauncher slcspLauncher = new SlcspLauncher();
