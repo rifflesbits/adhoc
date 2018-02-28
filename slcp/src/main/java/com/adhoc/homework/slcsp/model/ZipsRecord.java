@@ -3,6 +3,9 @@ package com.adhoc.homework.slcsp.model;
 import org.beanio.annotation.Field;
 import org.beanio.annotation.Record;
 
+/**
+ * Represents a record from the zips input file
+ */
 @Record
 public class ZipsRecord {
 	

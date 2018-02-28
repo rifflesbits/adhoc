@@ -4,6 +4,9 @@ import org.beanio.annotation.Field;
 import org.beanio.annotation.Fields;
 import org.beanio.annotation.Record;
 
+/**
+ * Represents a column header record from the zips file 
+ */
 @Record(maxOccurs=1)
 @Fields({
 	@Field(name="zipCode", literal="zipcode", ordinal=1),

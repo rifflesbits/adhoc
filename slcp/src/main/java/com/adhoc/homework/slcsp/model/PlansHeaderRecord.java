@@ -4,6 +4,9 @@ import org.beanio.annotation.Field;
 import org.beanio.annotation.Fields;
 import org.beanio.annotation.Record;
 
+/**
+ * Represents the column headers record from the Plans csv input file
+ */
 @Record(maxOccurs=1)
 @Fields({
 	@Field(name="planId", literal="plan_id", ordinal=1),

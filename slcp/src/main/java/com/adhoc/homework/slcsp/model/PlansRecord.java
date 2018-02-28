@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import org.beanio.annotation.Field;
 import org.beanio.annotation.Record;
 
+/**
+ * Represents a record from the Plans input csv file
+ */
 @Record
 public class PlansRecord {
 	

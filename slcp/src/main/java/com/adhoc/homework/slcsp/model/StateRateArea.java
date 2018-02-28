@@ -1,5 +1,9 @@
 package com.adhoc.homework.slcsp.model;
 
+/**
+ * Represents the tupple of combining the 
+ * State and RateArea
+ */
 public class StateRateArea {
 	
 	private String state;
@@ -10,6 +14,11 @@ public class StateRateArea {
 	}
 	
 	
+	/**
+	 * Convenience constructor
+	 * 
+	 * @param planRec
+	 */
 	public StateRateArea(PlansRecord planRec) {
 				
 		this.state = planRec.getState();
@@ -17,6 +26,11 @@ public class StateRateArea {
 		this.rateArea = planRec.getRateArea();		
 	}
 	
+	/**
+	 * Convenience constructor
+	 * 
+	 * @param zipsRecord
+	 */
 	public StateRateArea(ZipsRecord zipsRecord){
 		
 		this.state = zipsRecord.getState();
