@@ -27,27 +27,37 @@ public class SlcspProcessor {
 	}
 	
 	
-	Set<StateRateArea> getStateRateAreaSetForZipCode(String pZipCode,
+	Map<String, Set<StateRateArea>> getZipMapToStateRateAreaSet(
 			Map<String, List<ZipsRecord>> pZipCodeMapToZipRecList) {
 					
-		Set<StateRateArea> rStateRateAreaSet = new HashSet<StateRateArea>();
-				
-		List<ZipsRecord> zipRecList = pZipCodeMapToZipRecList.get(pZipCode);
-				
-		for(ZipsRecord iZipsRecord : zipRecList){
+		Map<String, Set<StateRateArea>> rZipMapToStateRateAreaSet = new HashMap<String, Set<StateRateArea>>();
+		
+		// loop through all the zip codes				
+		for(String iZip : pZipCodeMapToZipRecList.keySet()){
 			
-			StateRateArea stateRateArea = new StateRateArea(iZipsRecord);
-						
-			rStateRateAreaSet.add(stateRateArea);
+			List<ZipsRecord> zipRecList = pZipCodeMapToZipRecList.get(iZip);
+			
+			Set<StateRateArea> stateRateAreaSet = new HashSet<StateRateArea>();
+			
+			// loop through the zip records for each zip code
+			// storing the stateRateAreas in a set for each zip code
+			for(ZipsRecord iZipsRecord : zipRecList){
+				
+				StateRateArea stateRateArea = new StateRateArea(iZipsRecord);
+				
+				stateRateAreaSet.add(stateRateArea);
+			}
+			
+			rZipMapToStateRateAreaSet.put(iZip, stateRateAreaSet);			
 		}
 		
-		return rStateRateAreaSet;		
+		return rZipMapToStateRateAreaSet;		
 	}
 	
 	
 	
 	
-	Map<String, List<ZipsRecord>> getZipCodeMapToZipsRecList(){
+	Map<String, List<ZipsRecord>> getZipMapToZipsRecList(){
 		
 		List<String> zipCodeListFromSlcpRecList = getRequestedZipCodeList();
 		
@@ -90,10 +100,9 @@ public class SlcspProcessor {
 		return rZipCodeList;
 	}
 	
-		
 	
-	public Map<StateRateArea, Set<BigDecimal>> getRateAreaMapToSilverPlanRateSet(
-			Set<StateRateArea> pStateRateAreaSet) {
+	
+	public Map<StateRateArea, Set<BigDecimal>> getRateAreaMapToSilverPlanRateSet() {
 
 		Map<StateRateArea, Set<BigDecimal>> rateAreaMapToSilverPlanRateSet = new HashMap<StateRateArea, Set<BigDecimal>>();
 		
@@ -103,25 +112,22 @@ public class SlcspProcessor {
 			
 			StateRateArea stateRateArea = new StateRateArea(iPlanRec);			
 			
-			if(pStateRateAreaSet.contains(stateRateArea)){
+			// will be non-null if having already processed this stateRateArea
+			// at least once
+			Set<BigDecimal> rateSet = rateAreaMapToSilverPlanRateSet.get(stateRateArea);
+			
+			if(rateSet == null){
 				
-				// will be non-null if having already processed this stateRateArea
-				// at least once
-				Set<BigDecimal> rateSet = rateAreaMapToSilverPlanRateSet.get(stateRateArea);
+				// the first time we're encountering this stateRateArea, so 
+				// create a new set and add it to the map
+				rateSet = new HashSet<BigDecimal>();
 				
-				if(rateSet == null){
-					
-					// the first time we're encountering this stateRateArea, so 
-					// create a new set and add it to the map
-					rateSet = new HashSet<BigDecimal>();
-					
-					rateAreaMapToSilverPlanRateSet.put(stateRateArea, rateSet);
-				}
-				
-				BigDecimal rate = iPlanRec.getRate();
-				
-				rateSet.add(rate);
-			}			
+				rateAreaMapToSilverPlanRateSet.put(stateRateArea, rateSet);
+			}
+			
+			BigDecimal rate = iPlanRec.getRate();
+			
+			rateSet.add(rate);		
 		}		
 		
 		return rateAreaMapToSilverPlanRateSet;
