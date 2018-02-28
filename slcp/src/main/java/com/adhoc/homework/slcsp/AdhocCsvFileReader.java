@@ -18,8 +18,18 @@ import com.adhoc.homework.slcsp.model.SlcspRecord;
 import com.adhoc.homework.slcsp.model.ZipsHeaderRecord;
 import com.adhoc.homework.slcsp.model.ZipsRecord;
 
+/**
+ * Reads resource files required for running the script
+ */
 public class AdhocCsvFileReader {
-	
+		
+	/**
+	 * Reads the slcsp file containing the zip codes for which a 
+	 * rate should be found and set
+	 * 
+	 * @return
+	 * 	  records representing the slcsp file
+	 */
 	public List<SlcspRecord> readSlcspFile(){
 
 		List<SlcspRecord> rSlcspRecList = new ArrayList<SlcspRecord>();
@@ -56,6 +66,17 @@ public class AdhocCsvFileReader {
 	}
 	
 	
+	/**
+	 * Reads from the zips csv input file, returning records that 
+	 * match the specified zip codes in the parameter
+	 * 
+	 * @param pZipCodesToReadList
+	 * 		The zip codes for which records should be returned
+	 * 
+	 * @return
+	 * 		A list of {@link ZipsRecord} from the zips file, where 
+	 * 		these records correspond to those requested 
+	 */
 	public List<ZipsRecord> readZipsFile(List<String> pZipCodesToReadList) {
 		
 		if(pZipCodesToReadList == null || pZipCodesToReadList.isEmpty()){
@@ -91,6 +112,8 @@ public class AdhocCsvFileReader {
 				
 				String zipCode = iZipsRecord.getZipCode();
 				
+				// see if this record zip code matches one 
+				// that was requested by the method parameter
 				if(pZipCodesToReadList.contains(zipCode)){
 				
 					rZipsRecList.add(iZipsRecord);	
@@ -102,6 +125,12 @@ public class AdhocCsvFileReader {
 	}
 	
 	
+	/**
+	 * Reads the silver plans from the plans file.
+	 * 
+	 * @return
+	 * 		Silver plan records from the plans file 
+	 */
 	public List<PlansRecord> readSilverPlansFromFile(){
 		
 		List<PlansRecord> rPlansRecList = new ArrayList<PlansRecord>();
@@ -132,7 +161,7 @@ public class AdhocCsvFileReader {
 
 				String metalLevel = iPlansRecord.getMetalLevel();
 				
-				if("SILVER".equalsIgnoreCase(metalLevel)){
+				if("Silver".equalsIgnoreCase(metalLevel)){
 				
 					rPlansRecList.add(iPlansRecord);
 				}							
@@ -143,3 +172,4 @@ public class AdhocCsvFileReader {
 	}
 
 }
+

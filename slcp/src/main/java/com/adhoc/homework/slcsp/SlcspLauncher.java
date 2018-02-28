@@ -11,6 +11,9 @@ import java.util.logging.Logger;
 import com.adhoc.homework.slcsp.model.StateRateArea;
 import com.adhoc.homework.slcsp.model.ZipsRecord;
 
+/**
+ * Contains main entry point for running the SLCSP script
+ */
 public class SlcspLauncher {
 
 	private Logger logger = Logger.getLogger(getClass().getName());
