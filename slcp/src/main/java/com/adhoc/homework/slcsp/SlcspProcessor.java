@@ -1,5 +1,6 @@
 package com.adhoc.homework.slcsp;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,9 +20,6 @@ public class SlcspProcessor {
 	
 	private AdhocCsvFileReader adhocCsvFileReader;
 		
-	private List<PlansRecord> plansRecList;
-	
-		
 	
 	public SlcspProcessor() {
 		
@@ -37,16 +35,9 @@ public class SlcspProcessor {
 		List<ZipsRecord> zipRecList = pZipCodeMapToZipRecList.get(pZipCode);
 				
 		for(ZipsRecord iZipsRecord : zipRecList){
+			
+			StateRateArea stateRateArea = new StateRateArea(iZipsRecord);
 						
-			String state = iZipsRecord.getState();
-			
-			String rateArea = iZipsRecord.getRateArea();
-			
-			StateRateArea stateRateArea = new StateRateArea();
-			
-			stateRateArea.setState(state);
-			stateRateArea.setRateArea(rateArea);
-			
 			rStateRateAreaSet.add(stateRateArea);
 		}
 		
@@ -101,21 +92,41 @@ public class SlcspProcessor {
 	
 		
 	
-	public List<PlansRecord> getPlansRecList(){
+	public Map<StateRateArea, Set<BigDecimal>> getRateAreaMapToSilverPlanRateSet(
+			Set<StateRateArea> pStateRateAreaSet) {
+
+		Map<StateRateArea, Set<BigDecimal>> rateAreaMapToSilverPlanRateSet = new HashMap<StateRateArea, Set<BigDecimal>>();
 		
-		if(plansRecList != null){
+		List<PlansRecord> silverPlanRecList = adhocCsvFileReader.readSilverPlansFromFile();
+		
+		for(PlansRecord iPlanRec : silverPlanRecList){
 			
-			return plansRecList;
-		}
+			StateRateArea stateRateArea = new StateRateArea(iPlanRec);			
+			
+			if(pStateRateAreaSet.contains(stateRateArea)){
+				
+				// will be non-null if having already processed this stateRateArea
+				// at least once
+				Set<BigDecimal> rateSet = rateAreaMapToSilverPlanRateSet.get(stateRateArea);
+				
+				if(rateSet == null){
+					
+					// the first time we're encountering this stateRateArea, so 
+					// create a new set and add it to the map
+					rateSet = new HashSet<BigDecimal>();
+					
+					rateAreaMapToSilverPlanRateSet.put(stateRateArea, rateSet);
+				}
+				
+				BigDecimal rate = iPlanRec.getRate();
+				
+				rateSet.add(rate);
+			}			
+		}		
 		
-		plansRecList = adhocCsvFileReader.readPlansFile();
-		
-		logger.info("plansRecList size: " + (plansRecList == null ? 0 : plansRecList.size()));
-		
-		return plansRecList;
+		return rateAreaMapToSilverPlanRateSet;
 	}
 	
+	
 }
-
-
 

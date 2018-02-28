@@ -6,6 +6,24 @@ public class StateRateArea {
 	
 	private String rateArea;
 
+	public StateRateArea() {	
+	}
+	
+	
+	public StateRateArea(PlansRecord planRec) {
+				
+		this.state = planRec.getState();
+		
+		this.rateArea = planRec.getRateArea();		
+	}
+	
+	public StateRateArea(ZipsRecord zipsRecord){
+		
+		this.state = zipsRecord.getState();
+		
+		this.rateArea = zipsRecord.getRateArea();			
+	}
+	
 	public String getState() {
 		return state;
 	}
@@ -31,31 +49,49 @@ public class StateRateArea {
 	public int hashCode() {
 		
 		final int prime = 31;
+		
 		int result = 1;
+		
 		result = prime * result + ((rateArea == null) ? 0 : rateArea.hashCode());
+		
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
+		
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
+		
 		if (this == obj)
 			return true;
+		
 		if (obj == null)
 			return false;
+		
 		if (getClass() != obj.getClass())
 			return false;
+		
 		StateRateArea other = (StateRateArea) obj;
+		
 		if (rateArea == null) {
+			
 			if (other.rateArea != null)
+				
 				return false;
+			
 		} else if (!rateArea.equals(other.rateArea))
+			
 			return false;
+		
 		if (state == null) {
+			
 			if (other.state != null)
 				return false;
+			
 		} else if (!state.equals(other.state))
+			
 			return false;
+		
 		return true;
 	}
 	

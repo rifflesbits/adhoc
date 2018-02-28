@@ -1,0 +1,10 @@
+
+slcsp
+
+Insure jdk and maven are installed
+
+Run mvn install from the root project directory
+
+Navigate in a terminal window to the target directory and run:
+
+java -jar [filename.jar]

@@ -102,7 +102,7 @@ public class AdhocCsvFileReader {
 	}
 	
 	
-	public List<PlansRecord> readPlansFile(){
+	public List<PlansRecord> readSilverPlansFromFile(){
 		
 		List<PlansRecord> rPlansRecList = new ArrayList<PlansRecord>();
 		
@@ -129,8 +129,13 @@ public class AdhocCsvFileReader {
 			if(oRecord instanceof PlansRecord){
 
 				PlansRecord iPlansRecord = (PlansRecord)oRecord;
+
+				String metalLevel = iPlansRecord.getMetalLevel();
 				
-				rPlansRecList.add(iPlansRecord);				
+				if("SILVER".equalsIgnoreCase(metalLevel)){
+				
+					rPlansRecList.add(iPlansRecord);
+				}							
 			}
 		}
 		
