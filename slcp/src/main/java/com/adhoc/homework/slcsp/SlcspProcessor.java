@@ -171,6 +171,63 @@ public class SlcspProcessor {
 		return rateAreaMapToSilverPlanRateSet;
 	}
 	
+	/**
+	 * Gets the slcsp rate for the specified zip code, using the lookup collections
+	 * 
+	 * @param iZipCode
+	 * 		The zip code for which the slcsp rate should be returned
+	 * 
+	 * @param pZipMapToStateRateAreaSet
+	 * 		The collection for looking up the zip's state rate areas
+	 * 
+	 * @param pRateAreaMapToSilverPlanRateSet
+	 * 		The collection for looking up the rates for the rate area
+	 * 
+	 * @return
+	 * 		the slcsp rate for the specified zip code
+	 */
+	BigDecimal getSlcspRateForZip(String iZipCode, 
+			Map<String,	Set<StateRateArea>> pZipMapToStateRateAreaSet,
+			Map<StateRateArea, SortedSet<BigDecimal>> pRateAreaMapToSilverPlanRateSet){
+		
+		BigDecimal rSlcspRate = null;
+		
+		Set<StateRateArea> stateRateAreaSetForZip = pZipMapToStateRateAreaSet.get(iZipCode);
+
+		if(stateRateAreaSetForZip == null){
+			
+			logger.warning("stateRateAreaSetForZip == null for zip: " + iZipCode + " (Can't get rate)");
+			
+			return null;
+			
+		}else if(stateRateAreaSetForZip.size() != 1){
+			
+			logger.warning("stateRateAreaSetForZip.size() != 1 for zip: " + iZipCode 
+					+ " (ambiguous, so can't get rate)");
+			
+			return null;
+		}
+		
+		StateRateArea stateRateArea = stateRateAreaSetForZip.iterator().next();
+
+		SortedSet<BigDecimal> sortedRateSet = pRateAreaMapToSilverPlanRateSet.get(stateRateArea);
+
+		
+		if(sortedRateSet != null && sortedRateSet.size() >= 2){
+			
+			List<BigDecimal> sortedRateList = new ArrayList<BigDecimal>(sortedRateSet);
+			
+			rSlcspRate = sortedRateList.get(1);
+			
+		}else{
+			
+			logger.warning("sortedRateSet size not >= 2, Can't get slcsp rate");
+		
+			rSlcspRate = null;
+		}		
+		
+		return rSlcspRate;
+	}	
 	
 }
 

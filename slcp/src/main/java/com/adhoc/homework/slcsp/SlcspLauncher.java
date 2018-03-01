@@ -1,7 +1,6 @@
 package com.adhoc.homework.slcsp;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,55 +19,18 @@ public class SlcspLauncher {
 	private Logger logger = Logger.getLogger(getClass().getName());
 
 	private SlcspProcessor slcspProcessor;
+	
+	private AdhocCsvFileWriter adhocCsvFileWriter;
 
+	
 	public SlcspLauncher() {
 
 		slcspProcessor = new SlcspProcessor();
+		
+		adhocCsvFileWriter = new AdhocCsvFileWriter();
 	}
 
 	
-	BigDecimal getSlcspRateForZip(String iZipCode, 
-			Map<String,	Set<StateRateArea>> pZipMapToStateRateAreaSet,
-			Map<StateRateArea, SortedSet<BigDecimal>> pRateAreaMapToSilverPlanRateSet){
-		
-		BigDecimal rSlcspRate = null;
-		
-		Set<StateRateArea> stateRateAreaSetForZip = pZipMapToStateRateAreaSet.get(iZipCode);
-
-		if(stateRateAreaSetForZip == null){
-			
-			logger.warning("stateRateAreaSetForZip == null for zip: " + iZipCode + " (Can't get rate)");
-			
-			return null;
-			
-		}else if(stateRateAreaSetForZip.size() != 1){
-			
-			logger.warning("stateRateAreaSetForZip.size() != 1 for zip: " + iZipCode 
-					+ " (ambiguous, so can't get rate)");
-			
-			return null;
-		}
-		
-		StateRateArea stateRateArea = stateRateAreaSetForZip.iterator().next();
-
-		SortedSet<BigDecimal> sortedRateSet = pRateAreaMapToSilverPlanRateSet.get(stateRateArea);
-
-		
-		if(sortedRateSet != null && sortedRateSet.size() >= 2){
-			
-			List<BigDecimal> sortedRateList = new ArrayList<BigDecimal>(sortedRateSet);
-			
-			rSlcspRate = sortedRateList.get(1);
-			
-		}else{
-			
-			logger.warning("sortedRateSet size not >= 2, Can't get slcsp rate");
-		
-			rSlcspRate = null;
-		}		
-		
-		return rSlcspRate;
-	}
 	
 	/**
 	 * Processes the input files, creates the needed data structures
@@ -91,16 +53,22 @@ public class SlcspLauncher {
 		Map<StateRateArea, SortedSet<BigDecimal>> rateAreaMapToSilverPlanRateSet = slcspProcessor
 				.getRateAreaMapToSilverPlanRateSet();
 
-		Map<String, BigDecimal> zipMapToSlcspRate = new LinkedHashMap<String, BigDecimal>();
+		// create an ordered map of zip codes pointing to their slcsp rates
+		// this collection is the final solution - to be written to an output file
+		LinkedHashMap<String, BigDecimal> zipMapToSlcspRate = new LinkedHashMap<String, BigDecimal>();
 		
+		// populate the map containing the rate solution
 		for (String iZipCode : zipCodeListFromSlcpRecList) {
 
-			BigDecimal slcspRate = getSlcspRateForZip(iZipCode, zipMapToStateRateAreaSet, rateAreaMapToSilverPlanRateSet);
+			BigDecimal slcspRate = slcspProcessor.getSlcspRateForZip(iZipCode, zipMapToStateRateAreaSet,
+					rateAreaMapToSilverPlanRateSet);
 			
 			zipMapToSlcspRate.put(iZipCode, slcspRate);
 		}
 		
-		System.out.println(zipMapToSlcspRate);
+		adhocCsvFileWriter.writeSlcspFile(zipMapToSlcspRate);
+		
+		logger.info("Completed processing report - wrote file!");
 
 	}
 
@@ -118,3 +86,5 @@ public class SlcspLauncher {
 	}
 
 }
+
+

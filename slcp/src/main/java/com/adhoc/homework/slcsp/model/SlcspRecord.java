@@ -1,5 +1,7 @@
 package com.adhoc.homework.slcsp.model;
 
+import java.math.BigDecimal;
+
 import org.beanio.annotation.Field;
 import org.beanio.annotation.Record;
 
@@ -13,7 +15,7 @@ public class SlcspRecord {
 	private String zipCode;
 	
 	@Field(ordinal=2)
-	private String rate;
+	private BigDecimal rate;
 
 	public String getZipCode() {
 		return zipCode;
@@ -23,11 +25,11 @@ public class SlcspRecord {
 		this.zipCode = zipCode;
 	}
 
-	public String getRate() {
+	public BigDecimal getRate() {
 		return rate;
 	}
 
-	public void setRate(String rate) {
+	public void setRate(BigDecimal rate) {
 		this.rate = rate;
 	}
 
