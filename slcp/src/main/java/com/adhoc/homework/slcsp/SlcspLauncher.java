@@ -2,6 +2,7 @@ package com.adhoc.homework.slcsp;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,46 +26,81 @@ public class SlcspLauncher {
 		slcspProcessor = new SlcspProcessor();
 	}
 
+	
+	BigDecimal getSlcspRateForZip(String iZipCode, 
+			Map<String,	Set<StateRateArea>> pZipMapToStateRateAreaSet,
+			Map<StateRateArea, SortedSet<BigDecimal>> pRateAreaMapToSilverPlanRateSet){
+		
+		BigDecimal rSlcspRate = null;
+		
+		Set<StateRateArea> stateRateAreaSetForZip = pZipMapToStateRateAreaSet.get(iZipCode);
+
+		if(stateRateAreaSetForZip == null){
+			
+			logger.warning("stateRateAreaSetForZip == null for zip: " + iZipCode + " (Can't get rate)");
+			
+			return null;
+			
+		}else if(stateRateAreaSetForZip.size() != 1){
+			
+			logger.warning("stateRateAreaSetForZip.size() != 1 for zip: " + iZipCode 
+					+ " (ambiguous, so can't get rate)");
+			
+			return null;
+		}
+		
+		StateRateArea stateRateArea = stateRateAreaSetForZip.iterator().next();
+
+		SortedSet<BigDecimal> sortedRateSet = pRateAreaMapToSilverPlanRateSet.get(stateRateArea);
+
+		
+		if(sortedRateSet != null && sortedRateSet.size() >= 2){
+			
+			List<BigDecimal> sortedRateList = new ArrayList<BigDecimal>(sortedRateSet);
+			
+			rSlcspRate = sortedRateList.get(1);
+			
+		}else{
+			
+			logger.warning("sortedRateSet size not >= 2, Can't get slcsp rate");
+		
+			rSlcspRate = null;
+		}		
+		
+		return rSlcspRate;
+	}
+	
 	/**
 	 * Processes the input files, creates the needed data structures
 	 * and writes the output file
 	 */
 	public void processReport() {
 
-		Map<String, List<ZipsRecord>> zipMapToZipRecList = slcspProcessor.getZipMapToZipsRecList();
+		// get a List of zip codes in the same order as the slcsp file
+		List<String> zipCodeListFromSlcpRecList = slcspProcessor.getRequestedZipCodeList();
+		
+		// get a map of requested zip code keys pointing to each of their zips csv file recs
+		Map<String, List<ZipsRecord>> zipMapToZipRecList = slcspProcessor
+				.getZipMapToZipsRecList(zipCodeListFromSlcpRecList);
 
+		// get a map of zip code keys pointing to each of their StateRateArea's
 		Map<String, Set<StateRateArea>> zipMapToStateRateAreaSet = slcspProcessor
 				.getZipMapToStateRateAreaSet(zipMapToZipRecList);
 
+		// get a map of StateRateArea keys pointing to their SortedSet of rates
 		Map<StateRateArea, SortedSet<BigDecimal>> rateAreaMapToSilverPlanRateSet = slcspProcessor
 				.getRateAreaMapToSilverPlanRateSet();
 
-		for (String iZipCode : zipMapToZipRecList.keySet()) {
+		Map<String, BigDecimal> zipMapToSlcspRate = new LinkedHashMap<String, BigDecimal>();
+		
+		for (String iZipCode : zipCodeListFromSlcpRecList) {
 
-			Set<StateRateArea> stateRateAreaSet = zipMapToStateRateAreaSet.get(iZipCode);
-
-			if (stateRateAreaSet != null && stateRateAreaSet.size() == 1) {
-
-				StateRateArea stateRateArea = stateRateAreaSet.iterator().next();
-
-				SortedSet<BigDecimal> sortedRateSet = rateAreaMapToSilverPlanRateSet.get(stateRateArea);
-
-				BigDecimal slcspRate = null;
-				
-				if(sortedRateSet != null && sortedRateSet.size() >= 2){
-					
-					List<BigDecimal> sortedRateList = new ArrayList<BigDecimal>(sortedRateSet);
-					
-					slcspRate = sortedRateList.get(1);
-				}
-				
-				System.out.println("zip code: " + iZipCode + ", slcspRate: " + slcspRate + ", stateRateArea: " + stateRateArea + ", rateSet: " + sortedRateSet);
-
-			} else {
-
-				logger.warning("zip: " + iZipCode + " has ambiguous stateRateAreaSet: " + stateRateAreaSet);
-			}
+			BigDecimal slcspRate = getSlcspRateForZip(iZipCode, zipMapToStateRateAreaSet, rateAreaMapToSilverPlanRateSet);
+			
+			zipMapToSlcspRate.put(iZipCode, slcspRate);
 		}
+		
+		System.out.println(zipMapToSlcspRate);
 
 	}
 

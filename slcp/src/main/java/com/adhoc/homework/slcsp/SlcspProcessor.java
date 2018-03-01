@@ -74,16 +74,19 @@ public class SlcspProcessor {
 	 * Gets a Map of zip codes pointing to their {@link ZipsRecord} 
 	 * objects red in from the input file
 	 *  
+	 * @param pZipCodeListFromSlcpRecList
+	 * 	  A list of zip codes to use in creating the lookup structure
+	 *  
 	 * @return
 	 * 		A Map of zip codes and their associated ZipsRecord's
 	 */
-	Map<String, List<ZipsRecord>> getZipMapToZipsRecList(){
+	Map<String, List<ZipsRecord>> getZipMapToZipsRecList(List<String> pZipCodeListFromSlcpRecList){
 		
-		List<String> zipCodeListFromSlcpRecList = getRequestedZipCodeList();
-		
+		// the return collection
 		Map<String, List<ZipsRecord>> zipCodeMapToZipsRecList = new HashMap<String, List<ZipsRecord>>();
 		
-		List<ZipsRecord> zipRecList = adhocCsvFileReader.readZipsFile(zipCodeListFromSlcpRecList);
+		// get all the zips file records corresponding to the requested zip codes
+		List<ZipsRecord> zipRecList = adhocCsvFileReader.readZipsFile(pZipCodeListFromSlcpRecList);
 		
 		for(ZipsRecord iZipsRecord : zipRecList){
 			
