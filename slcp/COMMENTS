@@ -1,10 +1,14 @@
 
 slcsp
 
-Insure jdk and maven are installed
+Insure jdk 8 or newer is installed 
+
+Insure the latest apache maven is installed
 
 Run mvn install from the root project directory
 
-Navigate in a terminal window to the target directory and run:
+Navigate in a terminal window to the project target directory and run:
 
-java -jar [filename.jar]
+java -jar slcsp-1.0.0-jar-with-dependencies.jar
+
+Note the slcsp.csv solution file is output in the target directory

@@ -1,11 +1,8 @@
 package com.adhoc.homework.slcsp;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
-import java.util.logging.Logger;
 
 import org.beanio.BeanWriter;
 import org.beanio.StreamFactory;
@@ -20,29 +17,19 @@ import com.adhoc.homework.slcsp.model.SlcspRecord;
  */
 public class AdhocCsvFileWriter {
 
-	private Logger logger = Logger.getLogger(getClass().getName());
-	
 	
 	/**
-	 * Writes the slcsp output file using the provided input records
+	 * Writes the slcsp output to the specified writer, using the provided input
+	 * records
 	 * 
 	 * @param zipMapToSlcspRate
-	 * 		An ordered map of zip code keys and their associated rates
+	 * 		The records to write
+	 * 
+	 * @param pWriter
+	 * 		The writer for writing the output
 	 */
-	public void writeSlcspFile(LinkedHashMap<String, BigDecimal> zipMapToSlcspRate){
-
-		Writer slcspFileWriter = null;
-		
-		try {			
-			slcspFileWriter = new FileWriter("Slcsp.csv");
-			
-		} catch (IOException e) {
-			
-			logger.severe("Couldn't create file Slcsp.csv" + e);
-			
-			return;
-		}			
-		
+	public void writeSlcspFile(LinkedHashMap<String, BigDecimal> zipMapToSlcspRate, Writer pWriter){
+				
 		StreamFactory streamFactory = StreamFactory.newInstance();
 		
 		StreamBuilder streamBuilder = new StreamBuilder("SlcspFile")
@@ -53,7 +40,7 @@ public class AdhocCsvFileWriter {
 		
 		streamFactory.define(streamBuilder);
 				
-		BeanWriter beanWriter = streamFactory.createWriter("SlcspFile", slcspFileWriter);
+		BeanWriter beanWriter = streamFactory.createWriter("SlcspFile", pWriter);
 				
 		// write one line for the column header rec
 		beanWriter.write(new SlcspHeaderRecord());

@@ -1,5 +1,8 @@
 package com.adhoc.homework.slcsp;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,8 +37,11 @@ public class SlcspLauncher {
 	/**
 	 * Processes the input files, creates the needed data structures
 	 * and writes the output file
+	 * 
+	 * @param pOutputWriter
+	 * 		The writer for writing the output file 
 	 */
-	public void processReport() {
+	public void processReport(Writer pOutputWriter) {
 
 		// get a List of zip codes in the same order as the slcsp file
 		List<String> zipCodeListFromSlcpRecList = slcspProcessor.getRequestedZipCodeList();
@@ -65,13 +71,14 @@ public class SlcspLauncher {
 			zipMapToSlcspRate.put(iZipCode, slcspRate);
 		}
 		
-		adhocCsvFileWriter.writeSlcspFile(zipMapToSlcspRate);
-		
-		logger.info("Completed processing report - wrote file!");
+		adhocCsvFileWriter.writeSlcspFile(zipMapToSlcspRate, pOutputWriter);
 		
 		logData(zipCodeListFromSlcpRecList, zipMapToStateRateAreaSet,
 				rateAreaMapToSilverPlanRateSet);
+		
+		logger.info("Completed processing report - wrote output file !" );
 	}
+
 
 	
 	/**
@@ -110,6 +117,26 @@ public class SlcspLauncher {
 		}
 	}
 	
+	/**
+	 * Gets a writer to use for the output file 
+	 * 
+	 * @return
+	 * 		a writer to use for the output file
+	 */
+	private Writer getFileWriter(){
+		
+		Writer fileWriter = null;
+		
+		try {
+			fileWriter = new FileWriter("slcsp.csv");
+			
+		} catch (IOException e) {
+			
+			logger.severe("Couldn't create output file writer");
+		}
+		
+		return fileWriter;
+	}	
 	
 	/**
 	 * Main entry point method
@@ -121,7 +148,9 @@ public class SlcspLauncher {
 
 		SlcspLauncher slcspLauncher = new SlcspLauncher();
 
-		slcspLauncher.processReport();
+		Writer fileWriter = slcspLauncher.getFileWriter();
+		
+		slcspLauncher.processReport(fileWriter);
 	}
 
 }
