@@ -221,7 +221,7 @@ public class SlcspProcessor {
 			
 		}else{
 			
-			logger.warning("sortedRateSet size not >= 2, Can't get slcsp rate");
+			logger.warning("sortedRateSet size not >= 2, Can't get slcsp rate for stateRateArea: " + stateRateArea);
 		
 			rSlcspRate = null;
 		}		

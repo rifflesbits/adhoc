@@ -15,6 +15,9 @@ import org.beanio.builder.StreamBuilder;
 import com.adhoc.homework.slcsp.model.SlcspHeaderRecord;
 import com.adhoc.homework.slcsp.model.SlcspRecord;
 
+/**
+ * Utility for writing csv file
+ */
 public class AdhocCsvFileWriter {
 
 	private Logger logger = Logger.getLogger(getClass().getName());

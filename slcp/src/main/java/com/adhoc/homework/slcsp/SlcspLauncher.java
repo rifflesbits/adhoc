@@ -31,7 +31,6 @@ public class SlcspLauncher {
 	}
 
 	
-	
 	/**
 	 * Processes the input files, creates the needed data structures
 	 * and writes the output file
@@ -52,7 +51,7 @@ public class SlcspLauncher {
 		// get a map of StateRateArea keys pointing to their SortedSet of rates
 		Map<StateRateArea, SortedSet<BigDecimal>> rateAreaMapToSilverPlanRateSet = slcspProcessor
 				.getRateAreaMapToSilverPlanRateSet();
-
+		
 		// create an ordered map of zip codes pointing to their slcsp rates
 		// this collection is the final solution - to be written to an output file
 		LinkedHashMap<String, BigDecimal> zipMapToSlcspRate = new LinkedHashMap<String, BigDecimal>();
@@ -69,9 +68,49 @@ public class SlcspLauncher {
 		adhocCsvFileWriter.writeSlcspFile(zipMapToSlcspRate);
 		
 		logger.info("Completed processing report - wrote file!");
-
+		
+		logData(zipCodeListFromSlcpRecList, zipMapToStateRateAreaSet,
+				rateAreaMapToSilverPlanRateSet);
 	}
 
+	
+	/**
+	 * Displays interesting data used in processing the solution
+	 *  
+	 * @param zipCodeListFromSlcpRecList
+	 * 
+	 * @param zipMapToStateRateAreaSet
+	 * 
+	 * @param rateAreaMapToSilverPlanRateSet
+	 */
+	void logData(List<String> zipCodeListFromSlcpRecList, 
+			Map<String, Set<StateRateArea>> zipMapToStateRateAreaSet,
+			Map<StateRateArea, SortedSet<BigDecimal>> rateAreaMapToSilverPlanRateSet){
+		
+		System.out.println("\n\nLogged Data:\n\n");
+		
+		for(String iZip : zipCodeListFromSlcpRecList){
+			
+			System.out.print(iZip + ": ");
+			
+			Set<StateRateArea> stateAreaRateSet = zipMapToStateRateAreaSet.get(iZip);
+			
+			System.out.print(stateAreaRateSet);
+			
+			if(stateAreaRateSet != null && stateAreaRateSet.size() == 1){
+				
+				StateRateArea stateRateArea = stateAreaRateSet.iterator().next();
+				
+				SortedSet<BigDecimal>  rates = rateAreaMapToSilverPlanRateSet.get(stateRateArea);
+				
+				System.out.print(rates);
+			}
+			
+			System.out.print("\n");
+		}
+	}
+	
+	
 	/**
 	 * Main entry point method
 	 * 
@@ -86,5 +125,4 @@ public class SlcspLauncher {
 	}
 
 }
-
 
