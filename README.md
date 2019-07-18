@@ -1,5 +1,5 @@
 
-This is a sample project I wrote for a job interview
+This is a sample project I wrote for a job interview assignment.  
 
 
 # adhoc
